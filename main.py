@@ -77,9 +77,9 @@ class MinHeap:
         izq: int = self.hijo_izquierdo(i)
         der: int = self.hijo_derecho(i)
 
-        if izq < len(self.lista) and self.peso(izq) > self.peso(menor):
+        if izq < len(self.lista) and self.peso(izq) < self.peso(menor):
             menor = izq
-        if der < len(self.lista) and self.peso(der) > self.peso(menor):
+        if der < len(self.lista) and self.peso(der) < self.peso(menor):
             menor = der
 
         if menor != i:
