@@ -27,10 +27,11 @@ class Arista:
         return x + penalizacion[self.estado]
 
     def __repr__(self):
-        return f"Arista(min={self.min}, max={self.max}, estado={self.estado.name})"
+        return f"({self.min}, {self.max}, {self.estado.name})"
 
 
 type Nodo = str
+type MST = list[tuple[Nodo, Nodo, Arista]]
 type Grafo = dict[Nodo, list[tuple[Nodo, Arista]]]
 
 
@@ -94,8 +95,8 @@ class MinHeap:
         return menor.inicio, menor.fin, menor.arista
 
 
-def prim(grafo: Grafo, POI_inicial: Nodo):
-    mst: list[tuple[Nodo, Nodo, Arista]] = []
+def prim(grafo: Grafo, POI_inicial: Nodo) -> MST:
+    mst: MST = []
     cola = MinHeap()
 
     visitados = set([POI_inicial])
@@ -114,16 +115,59 @@ def prim(grafo: Grafo, POI_inicial: Nodo):
     return mst
 
 
+def print_grafo(grafo: Grafo):
+    print('{')
+    for v in grafo:
+        print(f'  \'{v}\': {grafo[v]}')
+    print('}')
+
+
+def print_mst(mst: MST):
+    print('[')
+    for inicio, fin, arista in mst:
+        print(f'  {inicio} --{arista}-> {fin}')
+    print(']')
+
+
+def prueba():
+    def rango_de_letras(inicio: str, fin: str) -> list[str]:
+        return [chr(i) for i in range(ord(inicio), ord(fin) + 1)]
+    tabla = [
+        ['a', 'b', (5, 20)],
+        ['b', 'c', (12, 35)],
+        ['c', 'd', (8, 25)],
+        ['d', 'e', (15, 40)],
+        ['e', 'f', (3, 18)],
+        ['f', 'g', (10, 30)],
+        ['g', 'h', (7, 22)],
+        ['h', 'a', (20, 45)],
+        ['a', 'c', (6, 28)],
+        ['b', 'd', (11, 33)],
+        ['c', 'e', (9, 27)],
+        ['d', 'f', (14, 38)],
+        ['e', 'g', (4, 19)],
+        ['f', 'h', (13, 36)],
+    ]
+    grafo = {v: [] for v in rango_de_letras('a', 'h') }
+    for fila in tabla:
+        min, max = fila[2]
+        inicio, fin = fila[0], fila[1]
+        arista = Arista(min, max, Estado.HABILITADO)
+        grafo[inicio].append((fin, arista))
+
+    print_grafo(grafo)
+    print_mst(prim(grafo, 'a'))
+
+
 def main():
-    grafo = {
+    print_mst(prim({
         'A': [('B', Arista(2, 4, Estado.HABILITADO)), ('C', Arista(1, 6, Estado.AGRIETADO))],
         'B': [('A', Arista(2, 4, Estado.HABILITADO)), ('D', Arista(2, 5, Estado.AGRIETADO))],
         'C': [('A', Arista(1, 6, Estado.AGRIETADO)), ('D', Arista(1, 3, Estado.HABILITADO))],
         'D': [('B', Arista(2, 5, Estado.AGRIETADO)), ('C', Arista(1, 3, Estado.HABILITADO))]
-    }
-    mst = prim(grafo, 'A')
-    print(mst)
+    }, 'A'))
 
+    prueba()
 
 if __name__ == "__main__":
     main()
