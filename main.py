@@ -73,18 +73,18 @@ class MinHeap:
             i = self.padre(i)
 
     def sift_down(self, i: int):
-        mayor: int = i
+        menor: int = i
         izq: int = self.hijo_izquierdo(i)
         der: int = self.hijo_derecho(i)
 
-        if izq < len(self.lista) and self.peso(izq) > self.peso(mayor):
-            mayor = izq
-        if der < len(self.lista) and self.peso(der) > self.peso(mayor):
-            mayor = der
+        if izq < len(self.lista) and self.peso(izq) > self.peso(menor):
+            menor = izq
+        if der < len(self.lista) and self.peso(der) > self.peso(menor):
+            menor = der
 
-        if mayor != i:
-            self.intercambiar(i, mayor)
-            self.sift_down(mayor)
+        if menor != i:
+            self.intercambiar(i, menor)
+            self.sift_down(menor)
 
     def desencolar(self) -> tuple[Nodo, Nodo, Arista]:
         assert(len(self.lista) > 0)
